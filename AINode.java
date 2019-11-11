@@ -16,7 +16,17 @@ public class AINode {
 			
 		}
 		
-		bias = Math.random();
+		if(inNodeCount > 0) {
+			
+			bias = Math.random();
+			
+		}
+		
+		else {
+			
+			bias = -1;
+			
+		}
 		
 	}
 	
