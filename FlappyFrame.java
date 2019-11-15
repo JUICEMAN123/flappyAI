@@ -31,16 +31,20 @@ public class FlappyFrame extends JFrame {
 
 		setVisible(true);
 		
-		addKeyListener(new KeyAdapter() {
+		/*addKeyListener(new KeyAdapter() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
 				
-				fp.bird.jump();
+				for(Bird bird : fp.birds) {
+					
+					bird.jump();
+					
+				}
 				
 			}
 			
-		});
+		});*/
 
 		new Thread(fp).start();
 

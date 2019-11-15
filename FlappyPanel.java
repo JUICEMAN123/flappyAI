@@ -8,24 +8,30 @@ import javax.swing.JPanel;
 public class FlappyPanel extends JPanel implements Runnable {
 
 	FlappyFrame frame;
-	FlappyAI ai;
 
-	Bird bird = new Bird(this);
+	Bird[] birds = new Bird[10];
 	Pole pole;
-	
-	public boolean end = false;
-	
+
 	public int score = -1;
 
 	public FlappyPanel(FlappyFrame frame, FlappyAI ai) {
 		this.frame = frame;
-		this.ai = ai;
 		setup();
 	}
 
 	private void setup() {
 
-		ai = new FlappyAI(this);
+		for (int i = 0; i < birds.length; i++) {
+
+			birds[i] = new Bird(this);
+
+		}
+
+	}
+	
+	public void newGen() {
+		
+		Bird[] newBirds = new Bird[10];
 		
 	}
 
@@ -35,9 +41,22 @@ public class FlappyPanel extends JPanel implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 800, 830);
 
-		g.setColor(Color.ORANGE);
-		g.fillRect(bird.getX(), bird.getY(), Bird.RADIUS * 2, Bird.RADIUS * 2);
+		
 
+
+		for(Bird bird : birds) {
+			
+			if(bird.end) {
+				
+				continue;
+				
+			}
+			
+			g.setColor(bird.color);
+			g.fillRect(bird.getX(), bird.getY(), Bird.RADIUS * 2, Bird.RADIUS * 2);
+			
+		}
+		
 		if (pole != null) {
 			g.setColor(Color.GREEN);
 			g.fillRect(pole.getX(), 0, Pole.POLEWIDTH, pole.getTopHeight());
@@ -53,38 +72,41 @@ public class FlappyPanel extends JPanel implements Runnable {
 
 		while (true) {
 
-			if(end) {
-				
-				break;
-				
+			for (int i = 0; i < birds.length; i++) {
+
+				birds[i].update();
+
 			}
-			
-			bird.update();
 
 			if (pole != null) {
-				
-				if(bird.checkCollision(pole)) {
-					
-					end = true;
-					
-				}
-				
-				if(!pole.update()) {
-					
+
+
+				if (!pole.update()) {
+
 					pole = null;
-					
+
 				}
 
 			}
 
 			else if (pole == null) {
-				
+
 				pole = new Pole();
-				ai.score = ++score;
+
+				++score;
+				
+				for (int i = 0; i < birds.length; i++) {
+
+					if(!birds[i].end) {
+						
+						birds[i].score = score;
+						
+					}
+
+				}
 
 			}
-
-			ai.update();
+			
 			repaint();
 
 			try {

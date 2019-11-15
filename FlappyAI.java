@@ -2,20 +2,21 @@ import java.util.Iterator;
 
 public class FlappyAI {
 
-	AINode[] inputNodes = new AINode[3];
+	AINode[] inputNodes = new AINode[2];
 	AINode[][] hiddenNodes = new AINode[1][4];
 	AINode[] outputNodes = new AINode[1];
-
-	double output = 0.5;
-
-	int score;
 
 	FlappyPanel fp;
 
 	public FlappyAI(FlappyPanel fp) {
 
 		this.fp = fp;
+		setup();
 
+	}
+	
+	public void setup() {
+		
 		for (int i = 0; i < inputNodes.length; i++) {
 
 			inputNodes[i] = new AINode(0);
@@ -35,19 +36,41 @@ public class FlappyAI {
 			outputNodes[i] = new AINode(hiddenNodes[hiddenNodes.length - 1].length);
 
 		}
-
+		
 	}
 
-	public void update() {
+	public double compute() {
 
-		inputNodes[0].value = fp.pole.getGapCenter();
-		inputNodes[1].value = fp.pole.getX();
-		inputNodes[2].value = fp.bird.getY();
-
+		for (int j = 0; j < hiddenNodes[0].length; j++) {
+			
+			hiddenNodes[0][j].activation(inputNodes);
+			
+		}
+		
+		for (int i = 1; i < hiddenNodes.length; i++) {
+			
+			for (int j = 0; j < hiddenNodes[i].length; j++) {
+				
+				hiddenNodes[i][j].activation(hiddenNodes[i-1]);
+				
+			}
+			
+		}
+		
+		for (int k = 0; k < outputNodes.length; k++) {
+			
+			outputNodes[k].activation(hiddenNodes[hiddenNodes.length - 1]);
+			
+		}
+		
+		return outputNodes[0].value;
+		
 	}
-
-	public void compute() {
-
+	
+	public void genNew(FlappyAI old) {
+		
+		
+		
 	}
 
 }
