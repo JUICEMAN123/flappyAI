@@ -15,7 +15,7 @@ public class FlappyFrame extends JFrame {
 
 	public FlappyFrame() {
 
-		fp = new FlappyPanel(this, null);
+		fp = new FlappyPanel(this);
 		setup();
 
 	}
@@ -23,7 +23,6 @@ public class FlappyFrame extends JFrame {
 	private void setup() {
 
 		setSize(WIDTH, HEIGHT);
-		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
@@ -31,7 +30,7 @@ public class FlappyFrame extends JFrame {
 
 		setVisible(true);
 		
-		/*addKeyListener(new KeyAdapter() {
+		addKeyListener(new KeyAdapter() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -44,7 +43,7 @@ public class FlappyFrame extends JFrame {
 				
 			}
 			
-		});*/
+		});
 
 		new Thread(fp).start();
 

@@ -4,24 +4,25 @@ public class Bird {
 
 	public final static int RADIUS = 15;
 
+	private static int jumpHeight = 25 * (800/FlappyFrame.WIDTH);
+	private static double jumpGravity = 0.2 / (800/FlappyFrame.WIDTH);
+	
+	private static double fallSpeed = 1.5 * (800/FlappyFrame.WIDTH);
+	private static double globalGravity = 0.01 * (800/FlappyFrame.WIDTH);
+	
+	FlappyPanel fp;
+	FlappyAI ai;
+	
 	Color color;
 	int score;
-	
-	FlappyAI ai;
+	int bestScore;
+
 	public boolean end = false;
 
 	private int x = 150;
 	private int y = 400;
 
 	private int jumpMomentum = 0;
-	private int jumpHeight = 60;
-	private double jumpGravity = 0.1;
-	private double jumpWidth = 0.1;
-	private int jumpDivider = 650;
-
-	private double fallSpeed = 1.5;
-
-	FlappyPanel fp;
 
 	public Bird(FlappyPanel fp) {
 
@@ -44,6 +45,7 @@ public class Bird {
 		// y -= 5 * FlappyFrame.DELTATIME;
 		//System.out.println("fff");
 		jumpMomentum = jumpHeight;
+		fallSpeed = 1.5 * (800/FlappyFrame.WIDTH);
 
 	}
 
@@ -65,12 +67,14 @@ public class Bird {
 
 	public boolean isAlive() {
 
-		return y < FlappyFrame.HEIGHT && y > 0 && (fp.pole != null) ? !checkCollision(fp.pole) : true;
+		return (y < FlappyFrame.HEIGHT) && (y > 0) && ((fp.pole != null) ? !checkCollision(fp.pole) : true);
 
 	}
 
 	public void update() {
 
+		//System.out.println(y + " " + (y > 0) + fp.genTracker);
+		
 		if (end) {
 
 			return;
@@ -79,16 +83,17 @@ public class Bird {
 		
 		if (isAlive()) {
 
-			y += (FlappyFrame.DELTASPEED * fallSpeed) - ((jumpMomentum >= 2)
-					? (jumpMomentum -= jumpGravity * FlappyFrame.DELTATIME / jumpDivider) / jumpWidth
-					: 0) * FlappyFrame.DELTATIME / jumpDivider;
-
+			y += (FlappyFrame.DELTASPEED * fallSpeed) - ((jumpMomentum >= 2) ? (jumpMomentum -= jumpGravity * FlappyFrame.DELTATIME / jumpMomentum) : 0);
+			fallSpeed += globalGravity;
+			
 		}
 
 		else {
 
 			y = FlappyFrame.HEIGHT / 2;
 			end = true;
+			fp.genTracker++;
+			fp.addBirdToNextGen(this);
 
 		}
 
@@ -115,7 +120,21 @@ public class Bird {
 	
 	public void reset() {
 		
+		if(score > bestScore) {
+			
+			bestScore = score;
+			
+		}
 		
+		color = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
+		score = 0;
+
+		end = false;
+
+		x = 150;
+		y = 400;
+
+		jumpMomentum = 0;
 		
 	}
 
