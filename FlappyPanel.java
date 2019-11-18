@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 public class FlappyPanel extends JPanel implements Runnable {
 
 	public static final Font font = new Font("monospace", Font.BOLD, 40);
-	public static final int BIRDCOUNT = 2000;
+	public static final int BIRDCOUNT = 1000;
 
 	FlappyFrame frame;
 
